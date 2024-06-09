@@ -1,5 +1,3 @@
-
-
 public class Main {
     public static void main(String[] args) {
 
@@ -44,6 +42,7 @@ public class Main {
         numberList.add(7);
         numberList.add(6);
 
+
         System.out.println("Список чисел до сортировки: " + numberList);
         numberList.sort();
         System.out.println("Отсортированный список чисел: " + numberList);
@@ -53,9 +52,6 @@ public class Main {
 
         MyCollection<String> stringList2 = new MyArrayList<>(stringList);
         System.out.println("Список \"stringList2\", созданный на основе \"stringList\": " + stringList2);
-
-
-
 
 
     }

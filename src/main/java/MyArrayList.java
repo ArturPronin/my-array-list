@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class MyArrayList<T> implements MyCollection<T> {
@@ -11,13 +12,12 @@ public class MyArrayList<T> implements MyCollection<T> {
     }
 
     public MyArrayList(int initialCapacity) {
-        if (initialCapacity < 0) {
-            throw new IllegalArgumentException("Неверный размер: " + initialCapacity);
-        }
+        checkException(initialCapacity);
         this.elements = (T[]) new Object[initialCapacity];
     }
 
-    /** Здесь применяем ключевое слово "extends"
+    /**
+     * Здесь применяем ключевое слово "extends"
      * Ограничение MyCollection<? extends T> - означает, что можно передать любую коллекцию, содержащую элементы типа "T" или подтипов "T"
      * То есть гарантируется, что элементы коллекции будут типа "T" или подтипами "T" и могут быть присвоены массиву T[]
      */
@@ -30,8 +30,9 @@ public class MyArrayList<T> implements MyCollection<T> {
         }
     }
 
-    @Override
+
     public void add(T element) {
+        T[] tempArray = elements;
         int minCapacity = size + 1;
         if (minCapacity > elements.length) {
             int newCapacity = elements.length + (elements.length + 1);
@@ -39,24 +40,20 @@ public class MyArrayList<T> implements MyCollection<T> {
                 newCapacity = minCapacity;
 
             }
-            elements = Arrays.copyOf(elements, newCapacity);
+            elements = Arrays.copyOf(tempArray, newCapacity);
         }
         elements[size++] = element;
     }
 
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс: " + index + ", Размер массива: " + size);
-        }
+        checkException(index);
         return elements[index];
     }
 
     @Override
     public T remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс: " + index + ", Размер массива: " + size);
-        }
+        checkException(index);
         T[] tempArray = elements;
         elements = (T[]) new Object[size];
         System.arraycopy(tempArray, 0, elements, 0, index);
@@ -75,9 +72,7 @@ public class MyArrayList<T> implements MyCollection<T> {
 
     @Override
     public void update(int index, T element) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс: " + index + ", Размер массива: " + size);
-        }
+        checkException(index);
         elements[index] = element;
     }
 
@@ -121,6 +116,12 @@ public class MyArrayList<T> implements MyCollection<T> {
                 return elements[currentIndex++];
             }
         };
+    }
+
+    private void checkException(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Индекс: " + index + ", Размер массива: " + size);
+        }
     }
 
     public String toString() {
